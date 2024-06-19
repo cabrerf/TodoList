@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.FeatureManagement.Mvc;
 using Repository;
 using Repository.Interfaces;
 
@@ -12,13 +13,6 @@ namespace TodoList.Controllers
     public class TodosController : ControllerBase
     {
 
-        List<Todo> todos = new List<Todo>
-        {
-            new Todo { Id = 1, Descripcion = "Study" },
-            new Todo { Id = 2, Descripcion = "Drink coffee" },
-            new Todo { Id = 3, Descripcion = "Play football" }
-        };
-
 
         private readonly IRepositoryTodo _TodoRepository;
 
@@ -28,20 +22,31 @@ namespace TodoList.Controllers
         }
 
         [HttpGet]
+        [FeatureGate("FeatureGet")]
         [Route("Get")]
         public async Task<IActionResult> Get()
         {
-            
+
+            if (!ModelState.IsValid)
+            {
+                ModelState.AddModelError("CustomError", "Disabled.");
+                return BadRequest(ModelState);
+            }
+
+
+            List<Todo> todos = _TodoRepository.Get();
             return Ok(todos);
+
+           
         }
 
         [HttpGet]
         [Route("GetId")]
         public async Task<IActionResult> GetId(int id)
         {
-            var miElemento = todos.FirstOrDefault(todo => todo.Id == id);
+            var myTodo = _TodoRepository.GetId(id);
             
-            return Ok(miElemento);
+            return Ok(myTodo);
         }
 
         [HttpPost]
@@ -54,11 +59,7 @@ namespace TodoList.Controllers
                 return UnprocessableEntity(ModelState);
             }
 
-            var t=  todos.LastOrDefault();
-
-            todo.Id = t.Id + 1;
-           
-            todos.Add(todo);
+            _TodoRepository.Create(todo);
 
 
             return Ok(todo);
@@ -75,10 +76,9 @@ namespace TodoList.Controllers
             }
 
 
-            var miElemento = todos.FirstOrDefault(todo => todo.Id == id);
-            miElemento.Descripcion = "change";
+           _TodoRepository.Put(id);
 
-            return Ok(miElemento);
+            return Ok("Id" + id.ToString() + "updated");
 
 
 
@@ -95,7 +95,7 @@ namespace TodoList.Controllers
                 return UnprocessableEntity(ModelState);
             }
 
-            var miElemento = todos.RemoveAll(todo => todo.Id == id);
+            _TodoRepository.Delete(id);
 
             return Ok("Id" + id.ToString() + "removed");
 

@@ -1,3 +1,8 @@
+using Microsoft.FeatureManagement;
+using Microsoft.OpenApi.Models;
+using Repository;
+using Repository.Interfaces;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -7,7 +12,14 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-//builder.Services.AddFeatureManagement();
+builder.Services.AddScoped<IRepositoryTodo, TodoRepository>();
+
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "Todo List", Version = "v1" });
+});
+
+builder.Services.AddFeatureManagement();
 
 var app = builder.Build();
 

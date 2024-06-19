@@ -13,29 +13,42 @@ namespace Repository
             new Todo { Id = 3, Descripcion = "Play football" }
         };
 
-        public Task<Todo> Create(Todo todo)
+        public Todo Create(Todo todo)
         {
-            throw new NotImplementedException();
+            var t = todos.LastOrDefault();
+
+            if(t!=null) {
+                todo.Id = t.Id + 1;
+
+                todos.Add(todo);
+            }
+           
+
+            return todo;
         }
 
-        public Task<Todo> Delete(int id)
+        public string Delete(int id)
         {
-            throw new NotImplementedException();
+            var miElemento = todos.RemoveAll(todo => todo.Id == id);
+            return "OK";
         }
 
-        public Task<IEnumerable<Todo>> Get()
+        public List<Todo> Get()
         {
-            throw new NotImplementedException();
+            return todos;
         }
 
-        public Task<Todo> GetId(int id)
+        public Todo GetId(int id)
         {
-            throw new NotImplementedException();
+            var miElemento = todos.FirstOrDefault(todo => todo.Id == id);
+            return miElemento;  
         }
 
-        public Task<Todo> Put(int id)
+        public Todo Put(int id)
         {
-            throw new NotImplementedException();
+            var miElemento = todos.FirstOrDefault(todo => todo.Id == id);
+            miElemento.Descripcion = "example change";
+            return miElemento;
         }
     }
 }

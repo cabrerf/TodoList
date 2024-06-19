@@ -10,13 +10,13 @@ namespace Repository.Interfaces
     public interface IRepositoryTodo
     {
 
-        Task<IEnumerable<Todo>> Get();
+        List<Todo> Get();
 
-        Task<Todo> Create(Todo todo);
+        Todo Create(Todo todo);
 
-        Task<Todo> Delete(int id);
-        Task<Todo> Put(int id);
-        Task<Todo> GetId(int id);
+        string Delete(int id);
+        Todo Put(int id);
+        Todo GetId(int id);
 
     }
 }
