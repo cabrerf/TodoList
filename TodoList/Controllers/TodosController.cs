@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Repository;
+using Repository.Interfaces;
 
 namespace TodoList.Controllers
 {
@@ -18,9 +20,11 @@ namespace TodoList.Controllers
         };
 
 
-        public TodosController()
+        private readonly IRepositoryTodo _TodoRepository;
+
+        public TodosController(IRepositoryTodo todoRepository)
         {
-           
+           _TodoRepository = todoRepository;
         }
 
         [HttpGet]
