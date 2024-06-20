@@ -57,8 +57,9 @@ namespace TodoTestUnit
         [Fact]
         public async Task Get_ReturnsOkResult_WhenTodosExist()
         {
+
             // Arrange
-            // Arrange
+            _mockfeatureManager.Setup(fm => fm.IsEnabledAsync("FeatureGet")).ReturnsAsync(true);
             var todos = new List<Todo>
             {
                 new Todo { Id = 1, Description = "make breakfast" },
@@ -80,6 +81,7 @@ namespace TodoTestUnit
         public async Task Get_ReturnsBadRequest_WhenModelStateIsInvalid()
         {
             // Arrange
+            _mockfeatureManager.Setup(fm => fm.IsEnabledAsync("FeatureGet")).ReturnsAsync(true);
             _controller.ModelState.AddModelError("Key", "An error occurs");
 
             // Act
