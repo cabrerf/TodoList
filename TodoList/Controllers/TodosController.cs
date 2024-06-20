@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.FeatureManagement;
 using Microsoft.FeatureManagement.Mvc;
 using Repository;
 using Repository.Interfaces;
@@ -15,19 +16,27 @@ namespace TodoList.Controllers
 
 
         private readonly IRepositoryTodo _todoRepository;
+        private readonly IFeatureManager _featureManager;
 
-        public TodosController(IRepositoryTodo todoRepository)
+        public TodosController(IRepositoryTodo todoRepository,IFeatureManager featureManager)
         {
             _todoRepository = todoRepository;
+            _featureManager = featureManager;
         }
 
         [HttpGet]
-        [FeatureGate("FeatureGet")]
         [Route("Get")]
         public async Task<IActionResult> Get()
         {
             try
             {
+                if (!await _featureManager.IsEnabledAsync(FeatureFlags.FeatureGet))
+                {
+                    return NotFound("Feature not enabled"); 
+                }
+
+
+
                 if (!ModelState.IsValid)
                 {
 
