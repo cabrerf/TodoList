@@ -24,6 +24,19 @@ Example of description: "Sleep, go to play football"
 3. Solid principles 
 4. It´s used the Repository pattern
 5. I also added an Authcontroller for login with JWT and random users,  but for this instance y mark the controller TodoList as a [AllowAnonymous] for easiest check.
+6. System only use a list in memory, not DB
+
+## Solution
+
+The solution have 4 projects: 
+
+Entites: Project about the entites
+
+Repository: Design pattern, acts as an intermediary layer between an application's business logic and controllers.
+
+TodoList: API REST
+
+TodoTestUnit: Project of TestUnit using XUnit framework
 
 
    
