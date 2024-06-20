@@ -15,11 +15,10 @@ namespace TodoList.Controllers
     public class TodosController : ControllerBase
     {
 
-
         private readonly IRepositoryTodo _todoRepository;
         private readonly IFeatureManager _featureManager;
 
-        public TodosController(IRepositoryTodo todoRepository,IFeatureManager featureManager)
+        public TodosController(IRepositoryTodo todoRepository, IFeatureManager featureManager)
         {
             _todoRepository = todoRepository;
             _featureManager = featureManager;
@@ -33,10 +32,8 @@ namespace TodoList.Controllers
             {
                 if (!await _featureManager.IsEnabledAsync(FeatureFlags.FeatureGet))
                 {
-                    return NotFound("Feature not enabled"); 
+                    return NotFound("Feature not enabled");
                 }
-
-
 
                 if (!ModelState.IsValid)
                 {
@@ -46,8 +43,6 @@ namespace TodoList.Controllers
 
                 var todos = _todoRepository.Get();
                 return Ok(todos);
-
-
             }
             catch (Exception ex)
             {
@@ -101,8 +96,6 @@ namespace TodoList.Controllers
                 }
 
                 Todo todo = _todoRepository.Create(description);
-
-
                 return Ok(todo);
 
 
@@ -116,7 +109,7 @@ namespace TodoList.Controllers
 
         }
 
-        
+
         [HttpPut]
         [Route("Put")]
 
@@ -126,14 +119,12 @@ namespace TodoList.Controllers
             try
             {
 
-
                 if (!ModelState.IsValid)
                 {
                     return UnprocessableEntity(ModelState);
                 }
 
-
-                Todo todo = _todoRepository.Put(id,description);
+                Todo todo = _todoRepository.Put(id, description);
 
                 if (todo == null)
                 {
@@ -141,7 +132,6 @@ namespace TodoList.Controllers
                 }
 
                 return Ok("Id " + id.ToString() + " updated");
-
 
             }
             catch (Exception ex)
@@ -161,7 +151,6 @@ namespace TodoList.Controllers
 
             try
             {
-
                 if (!ModelState.IsValid)
                 {
                     return BadRequest(ModelState);

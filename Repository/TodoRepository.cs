@@ -67,8 +67,6 @@ namespace Repository
 
                 throw;
             }
-
-
         }
 
         public Todo GetId(int id)
@@ -103,16 +101,12 @@ namespace Repository
 
                 miElemento.Description = description;
                 return miElemento;
-
-
             }
             catch (Exception)
             {
 
                 throw;
             }
-
-
         }
     }
 }
