@@ -15,7 +15,7 @@ namespace Repository.Interfaces
         Todo Create(string description);
 
         int Delete(int id);
-        Todo Put(int id);
+        Todo Put(int id, string description);
         Todo GetId(int id);
 
     }

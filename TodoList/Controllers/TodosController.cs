@@ -11,6 +11,7 @@ namespace TodoList.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [AllowAnonymous]
     public class TodosController : ControllerBase
     {
 
@@ -88,7 +89,7 @@ namespace TodoList.Controllers
         [HttpPost]
         [Route("Create")]
 
-        public async Task<IActionResult> Create(string description)
+        public async Task<IActionResult> Create([FromBody] string description)
         {
 
             try
@@ -115,14 +116,16 @@ namespace TodoList.Controllers
 
         }
 
+        
         [HttpPut]
         [Route("Put")]
 
-        public async Task<IActionResult> Put(int id)
+        public async Task<IActionResult> Put(int id, [FromBody] string description)
         {
 
             try
             {
+
 
                 if (!ModelState.IsValid)
                 {
@@ -130,14 +133,14 @@ namespace TodoList.Controllers
                 }
 
 
-                Todo todo = _todoRepository.Put(id);
+                Todo todo = _todoRepository.Put(id,description);
 
                 if (todo == null)
                 {
                     return NotFound($"Item with ID {id} not found.");
                 }
 
-                return Ok("Id" + id.ToString() + "updated");
+                return Ok("Id " + id.ToString() + " updated");
 
 
             }
@@ -161,7 +164,7 @@ namespace TodoList.Controllers
 
                 if (!ModelState.IsValid)
                 {
-                    return UnprocessableEntity(ModelState);
+                    return BadRequest(ModelState);
                 }
 
                 var remove = _todoRepository.Delete(id);
@@ -171,13 +174,13 @@ namespace TodoList.Controllers
                     return NotFound($"Item with ID {id} not found.");
                 }
 
-                return Ok("Id" + id.ToString() + "removed");
+                return Ok("Id " + id.ToString() + " removed");
 
             }
-            catch (Exception)
+            catch (Exception ex)
             {
 
-                throw;
+                return StatusCode(500, $"Internal server error: {ex.Message}");
             }
 
         }

@@ -88,7 +88,7 @@ namespace Repository
 
         }
 
-        public Todo Put(int id)
+        public Todo Put(int id, string description)
         {
 
             try
@@ -101,7 +101,7 @@ namespace Repository
                     return null;
                 }
 
-                miElemento.Description = "Example description";
+                miElemento.Description = description;
                 return miElemento;
 
 
