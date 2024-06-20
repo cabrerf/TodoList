@@ -83,9 +83,6 @@ namespace TodoList.Controllers
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
 
-
-
-
         }
 
         [HttpPost]
@@ -124,7 +121,6 @@ namespace TodoList.Controllers
         public async Task<IActionResult> Put(int id)
         {
 
-
             try
             {
 
@@ -142,8 +138,6 @@ namespace TodoList.Controllers
                 }
 
                 return Ok("Id" + id.ToString() + "updated");
-
-
 
 
             }
@@ -186,14 +180,7 @@ namespace TodoList.Controllers
                 throw;
             }
 
-
-
-
         }
-
-
-
-
 
     }
 }
