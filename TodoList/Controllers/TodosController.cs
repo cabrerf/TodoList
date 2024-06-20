@@ -14,11 +14,11 @@ namespace TodoList.Controllers
     {
 
 
-        private readonly IRepositoryTodo _TodoRepository;
+        private readonly IRepositoryTodo _todoRepository;
 
         public TodosController(IRepositoryTodo todoRepository)
         {
-           _TodoRepository = todoRepository;
+            _todoRepository = todoRepository;
         }
 
         [HttpGet]
@@ -26,43 +26,87 @@ namespace TodoList.Controllers
         [Route("Get")]
         public async Task<IActionResult> Get()
         {
-
-            if (!ModelState.IsValid)
+            try
             {
-                ModelState.AddModelError("CustomError", "Disabled.");
-                return BadRequest(ModelState);
+                if (!ModelState.IsValid)
+                {
+
+                    return BadRequest(ModelState);
+                }
+
+                var todos = _todoRepository.Get();
+                return Ok(todos);
+
+
+            }
+            catch (Exception ex)
+            {
+
+                return StatusCode(500, $"Internal server error: {ex.Message}");
             }
 
-
-            List<Todo> todos = _TodoRepository.Get();
-            return Ok(todos);
-
-           
         }
 
         [HttpGet]
         [Route("GetId")]
         public async Task<IActionResult> GetId(int id)
         {
-            var myTodo = _TodoRepository.GetId(id);
-            
-            return Ok(myTodo);
+            try
+            {
+
+                if (!ModelState.IsValid)
+                {
+
+                    return BadRequest(ModelState);
+                }
+
+                var myItem = _todoRepository.GetId(id);
+
+                if (myItem == null)
+                {
+                    return NotFound($"Item with ID {id} not found.");
+                }
+
+                return Ok(myItem);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+
+
+
+
         }
 
         [HttpPost]
         [Route("Create")]
 
-        public async Task<IActionResult> Create(Todo todo)
+        public async Task<IActionResult> Create(string description)
         {
-            if (!ModelState.IsValid)
+
+            try
             {
-                return UnprocessableEntity(ModelState);
+
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+
+                Todo todo = _todoRepository.Create(description);
+
+
+                return Ok(todo);
+
+
+            }
+            catch (Exception ex)
+            {
+
+                return StatusCode(500, $"Internal server error: {ex.Message}");
             }
 
-            _TodoRepository.Create(todo);
 
-
-            return Ok(todo);
         }
 
         [HttpPut]
@@ -70,17 +114,35 @@ namespace TodoList.Controllers
 
         public async Task<IActionResult> Put(int id)
         {
-            if (!ModelState.IsValid)
+
+
+            try
             {
-                return UnprocessableEntity(ModelState);
+
+                if (!ModelState.IsValid)
+                {
+                    return UnprocessableEntity(ModelState);
+                }
+
+
+                Todo todo = _todoRepository.Put(id);
+
+                if (todo == null)
+                {
+                    return NotFound($"Item with ID {id} not found.");
+                }
+
+                return Ok("Id" + id.ToString() + "updated");
+
+
+
+
             }
+            catch (Exception ex)
+            {
 
-
-           _TodoRepository.Put(id);
-
-            return Ok("Id" + id.ToString() + "updated");
-
-
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
 
         }
 
@@ -90,14 +152,32 @@ namespace TodoList.Controllers
 
         public async Task<IActionResult> Delete(int id)
         {
-            if (!ModelState.IsValid)
+
+            try
             {
-                return UnprocessableEntity(ModelState);
+
+                if (!ModelState.IsValid)
+                {
+                    return UnprocessableEntity(ModelState);
+                }
+
+                var remove = _todoRepository.Delete(id);
+
+                if (remove == 0)
+                {
+                    return NotFound($"Item with ID {id} not found.");
+                }
+
+                return Ok("Id" + id.ToString() + "removed");
+
+            }
+            catch (Exception)
+            {
+
+                throw;
             }
 
-            _TodoRepository.Delete(id);
 
-            return Ok("Id" + id.ToString() + "removed");
 
 
         }

@@ -12,9 +12,9 @@ namespace Repository.Interfaces
 
         List<Todo> Get();
 
-        Todo Create(Todo todo);
+        Todo Create(string description);
 
-        string Delete(int id);
+        int Delete(int id);
         Todo Put(int id);
         Todo GetId(int id);
 

@@ -3,52 +3,116 @@ using Repository.Interfaces;
 
 namespace Repository
 {
-    public class TodoRepository  :IRepositoryTodo
+    public class TodoRepository : IRepositoryTodo
     {
 
-        List<Todo> todos = new List<Todo>
+        private static List<Todo> todos = new List<Todo>
         {
-            new Todo { Id = 1, Descripcion = "Study" },
-            new Todo { Id = 2, Descripcion = "Drink coffee" },
-            new Todo { Id = 3, Descripcion = "Play football" }
+            new Todo { Id = 1, Description = "Study" },
+            new Todo { Id = 2, Description = "Drink coffee" },
+            new Todo { Id = 3, Description = "Play football" }
         };
 
-        public Todo Create(Todo todo)
+        public Todo Create(string description)
         {
-            var t = todos.LastOrDefault();
 
-            if(t!=null) {
-                todo.Id = t.Id + 1;
+            try
+            {
 
-                todos.Add(todo);
+                var addTodo = new Todo()
+                {
+                    Id = todos.Max(todo => todo.Id) + 1,
+                    Description = description
+                };
+
+                todos.Add(addTodo);
+                return addTodo;
+
             }
-           
+            catch (Exception)
+            {
 
-            return todo;
+                throw;
+            }
+
+
         }
 
-        public string Delete(int id)
+        public int Delete(int id)
         {
-            var miElemento = todos.RemoveAll(todo => todo.Id == id);
-            return "OK";
+            try
+            {
+                var miElemento = todos.RemoveAll(todo => todo.Id == id);
+                return miElemento;
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+
+
         }
 
         public List<Todo> Get()
         {
-            return todos;
+
+            try
+            {
+                return todos;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+
+
         }
 
         public Todo GetId(int id)
         {
-            var miElemento = todos.FirstOrDefault(todo => todo.Id == id);
-            return miElemento;  
+            try
+            {
+
+                var miElemento = todos.FirstOrDefault(todo => todo.Id == id);
+                return miElemento;
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+
         }
 
         public Todo Put(int id)
         {
-            var miElemento = todos.FirstOrDefault(todo => todo.Id == id);
-            miElemento.Descripcion = "example change";
-            return miElemento;
+
+            try
+            {
+
+                var miElemento = todos.FirstOrDefault(todo => todo.Id == id);
+
+                if (miElemento == null)
+                {
+                    return null;
+                }
+
+                miElemento.Description = "Example description";
+                return miElemento;
+
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+
+
         }
     }
 }
