@@ -6,6 +6,10 @@
 2. Open the solution in Visual Studio.
 3. Compile and run the application.
 
+## Comments 
+
+Todo entity is defined as: ID, description
+Example of description: "Sleep, go to play football"
 
 ## Comments about test
 
