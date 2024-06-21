@@ -3,8 +3,8 @@
 ## Installation Instructions
 
 1. Clone the repository.
-2. Open the solution in Visual Studio.
-3. Compile and run the application.
+2. Open the solution in Visual Studio
+3. Compile and run the application.  (.NET 8)
 
 ## Comments 
 
@@ -22,9 +22,10 @@ Example of description: "Sleep, go to play football"
 1. TodosController have a dependency injection of a repository that manage the list of todo
 2. TodosController have a dependency injection of a featureflag to manage feature flags
 3. Solid principles 
-4. It´s used the Repository pattern
+4. Used the Repository pattern
 5. I also added an Authcontroller for login with JWT and random users,  but for this instance y mark the controller TodoList as a [AllowAnonymous] for easiest check.
-6. System only use a list in memory, not DB
+6. For this instance system only use a list in memory, not DB, for that case i would be added a new project managing Data Access
+7. I added a ILogger interface for logging errores.
 
 ## Solution
 
@@ -34,7 +35,7 @@ Entites: Project about the entites
 
 Repository: Design pattern, acts as an intermediary layer between an application's business logic and controllers.
 
-TodoList: API REST
+TodoList: API REST with controllers
 
 TodoTestUnit: Project of TestUnit using XUnit framework
 
