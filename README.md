@@ -21,14 +21,12 @@ Example of description: "Sleep, go to play football"
 
 ## Important
 
-1. TodosController have a dependency injection of a repository that manage the list of todo
-2. TodosController have a dependency injection of a featureflag to manage feature flags
-3. TodosController have a dependency injection of a ILogger for logging errors.
-4. Solid principles 
-5. Used the Repository pattern
-6. I also added Authcontroller for login with JWT and random users,  but for this instance y mark the controller TodoList as a [AllowAnonymous] for easiest check.
-7. For this instance system only use a list in memory, not DB.
-8. System have ILogger interface for logging errors.
+1. Used dependecy injection
+2. Solid principles 
+3. Used the Repository pattern
+4. I also added Authcontroller for login with JWT and random users,  but for this instance y mark the controller TodoList as a [AllowAnonymous] for easiest check.
+5. For this instance system only use a list in memory, not DB.
+6. System have ILogger interface for logging errors.
 
 ## Solution
 
