@@ -11,6 +11,8 @@
 Todo entity is defined as: ID, description
 Example of description: "Sleep, go to play football"
 
+![alt text](image.png)
+
 ## Comments about test
 
 1. Test are in project TodoTestUnit
@@ -21,11 +23,12 @@ Example of description: "Sleep, go to play football"
 
 1. TodosController have a dependency injection of a repository that manage the list of todo
 2. TodosController have a dependency injection of a featureflag to manage feature flags
-3. Solid principles 
-4. Used the Repository pattern
-5. I also added an Authcontroller for login with JWT and random users,  but for this instance y mark the controller TodoList as a [AllowAnonymous] for easiest check.
-6. For this instance system only use a list in memory, not DB, for that case i would be added a new project managing Data Access
-7. I added a ILogger interface for logging errores.
+3. TodosController have a dependency injection of a ILogger for logging errors.
+4. Solid principles 
+5. Used the Repository pattern
+6. I also added Authcontroller for login with JWT and random users,  but for this instance y mark the controller TodoList as a [AllowAnonymous] for easiest check.
+7. For this instance system only use a list in memory, not DB.
+8. System have ILogger interface for logging errors.
 
 ## Solution
 
