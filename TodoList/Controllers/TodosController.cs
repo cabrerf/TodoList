@@ -17,11 +17,13 @@ namespace TodoList.Controllers
 
         private readonly IRepositoryTodo _todoRepository;
         private readonly IFeatureManager _featureManager;
+        private readonly ILogger<TodosController> _logger;
 
-        public TodosController(IRepositoryTodo todoRepository, IFeatureManager featureManager)
+        public TodosController(IRepositoryTodo todoRepository, IFeatureManager featureManager, ILogger<TodosController> logger)
         {
             _todoRepository = todoRepository;
             _featureManager = featureManager;
+            _logger = logger;
         }
 
         [HttpGet]
@@ -46,7 +48,7 @@ namespace TodoList.Controllers
             }
             catch (Exception ex)
             {
-
+                _logger.LogError(ex, "An error occurred while get todo list");
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
 
@@ -76,6 +78,7 @@ namespace TodoList.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, "An error occurred while get todo item");
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
 
@@ -102,7 +105,7 @@ namespace TodoList.Controllers
             }
             catch (Exception ex)
             {
-
+                _logger.LogError(ex, "An error occurred for create a product");
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
 
@@ -136,7 +139,7 @@ namespace TodoList.Controllers
             }
             catch (Exception ex)
             {
-
+                _logger.LogError(ex, "An error occurred  updating a product");
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
 
@@ -168,7 +171,7 @@ namespace TodoList.Controllers
             }
             catch (Exception ex)
             {
-
+                _logger.LogError(ex, "An error occurred  deleting a product");
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
 

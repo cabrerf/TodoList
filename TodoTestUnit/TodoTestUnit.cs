@@ -6,6 +6,8 @@ using Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.FeatureManagement;
+using Castle.Core.Logging;
+using Microsoft.Extensions.Logging;
 
 namespace TodoTestUnit
 {
@@ -17,13 +19,16 @@ namespace TodoTestUnit
         private readonly TodosController _controller;
         private readonly Mock<IRepositoryTodo> _mockTodoRepository;
         private readonly Mock<IFeatureManager> _mockfeatureManager;
+        private readonly Mock<ILogger<TodosController>> _loggerMock;
+
 
         public TodoTestUnit()
         {
 
             _mockTodoRepository = new Mock<IRepositoryTodo>();
             _mockfeatureManager = new Mock<IFeatureManager>();
-            _controller = new TodosController(_mockTodoRepository.Object, _mockfeatureManager.Object);
+            _loggerMock = new Mock<ILogger<TodosController>>();
+            _controller = new TodosController(_mockTodoRepository.Object, _mockfeatureManager.Object, _loggerMock.Object);
         }
 
 
