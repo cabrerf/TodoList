@@ -27,6 +27,7 @@ Example of description: "Sleep, go to play football"
 4. I also added Authcontroller for login with JWT and random users,  but for this instance y mark the controller TodoList as a [AllowAnonymous] for easiest check.
 5. For this instance system only use a list in memory, not DB.
 6. I added a ErrorHandling class with a Middleware for managing the errores
+7. For feature flags are different forms to implement, for this instance i used a featureManager
 
 ## Solution
 
