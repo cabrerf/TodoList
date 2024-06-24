@@ -6,6 +6,7 @@ using Repository;
 using Repository.Interfaces;
 using System.Text;
 using TodoList.Handler;
+using TodoList.InyectionExtensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,7 +16,7 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
+builder.AddInfrastructure();
 
 
 builder.Services.AddSwaggerGen(c =>

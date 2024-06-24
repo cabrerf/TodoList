@@ -17,7 +17,7 @@ namespace TodoTestUnit
 
         //ONLY TESTS FOR GET ENDPOINT
         private readonly TodosController _controller;
-        private readonly Mock<IRepository> _mockTodoRepository;
+        private readonly Mock<IRepository<Todo>> _mockTodoRepository;
         private readonly Mock<IFeatureManager> _mockfeatureManager;
         private readonly Mock<ILogger<TodosController>> _loggerMock;
 
@@ -25,7 +25,7 @@ namespace TodoTestUnit
         public TodoTestUnit()
         {
 
-            _mockTodoRepository = new Mock<IRepository>();
+            _mockTodoRepository = new Mock<IRepository<Todo>>();
             _mockfeatureManager = new Mock<IFeatureManager>();
             _loggerMock = new Mock<ILogger<TodosController>>();
             _controller = new TodosController(_mockTodoRepository.Object, _mockfeatureManager.Object, _loggerMock.Object);
@@ -55,7 +55,7 @@ namespace TodoTestUnit
             var result = await _controller.Get();
 
             // Assert
-            Assert.IsType<NotFoundObjectResult>(result); // Verifica si se devuelve un NotFound
+            Assert.IsType<NotFoundObjectResult>(result); // Verify if not found
         }
 
 
@@ -70,7 +70,7 @@ namespace TodoTestUnit
                 new Todo { Id = 1, Description = "make breakfast" },
                 new Todo { Id = 2, Description = "sleep" }
             };
-            _mockTodoRepository.Setup(repo => repo.Get()).Returns(todos);
+            _mockTodoRepository.Setup(repo => repo.Get()).Returns(Task.FromResult<IEnumerable<Todo>>(todos));
 
             // Act
             var result = await _controller.Get();

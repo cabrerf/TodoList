@@ -26,7 +26,6 @@ namespace TodoList.Controllers
         }
 
         [HttpGet]
-        [FeatureGate(FeatureFlags.FeatureGet)] // Esta es otra forma de aplicar el GetFeature donde se evita colocar codigo en el endpoint
         [ProducesResponseType(typeof(Todo), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(Nullable), StatusCodes.Status501NotImplemented)]
         [ProducesResponseType(typeof(Nullable), StatusCodes.Status500InternalServerError)]
