@@ -5,6 +5,7 @@ using Microsoft.OpenApi.Models;
 using Repository;
 using Repository.Interfaces;
 using System.Text;
+using TodoList.Handler;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,7 +16,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddScoped<IRepositoryTodo, TodoRepository>();
+
 
 builder.Services.AddSwaggerGen(c =>
 {
@@ -62,5 +63,7 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.UseMiddleware<HandlerException>();
 
 app.Run();

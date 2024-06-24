@@ -14,12 +14,11 @@ namespace TodoList.Controllers
     [AllowAnonymous]
     public class TodosController : ControllerBase
     {
-
-        private readonly IRepositoryTodo _todoRepository;
+        private readonly IRepository<Todo> _todoRepository;
         private readonly IFeatureManager _featureManager;
         private readonly ILogger<TodosController> _logger;
 
-        public TodosController(IRepositoryTodo todoRepository, IFeatureManager featureManager, ILogger<TodosController> logger)
+        public TodosController(IRepository<Todo> todoRepository, IFeatureManager featureManager, ILogger<TodosController> logger)
         {
             _todoRepository = todoRepository;
             _featureManager = featureManager;
@@ -27,155 +26,88 @@ namespace TodoList.Controllers
         }
 
         [HttpGet]
-        [Route("Get")]
+        [FeatureGate(FeatureFlags.FeatureGet)] // Esta es otra forma de aplicar el GetFeature donde se evita colocar codigo en el endpoint
+        [ProducesResponseType(typeof(Todo), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(Nullable), StatusCodes.Status501NotImplemented)]
+        [ProducesResponseType(typeof(Nullable), StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(typeof(Nullable), StatusCodes.Status405MethodNotAllowed)]
+
         public async Task<IActionResult> Get()
         {
-            try
-            {
-                if (!await _featureManager.IsEnabledAsync(FeatureFlags.FeatureGet))
-                {
-                    return NotFound("Feature not enabled");
-                }
+            if (!await _featureManager.IsEnabledAsync(FeatureFlags.FeatureGet))
+                return NotFound("Feature not enabled");
 
-                if (!ModelState.IsValid)
-                {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
 
-                    return BadRequest(ModelState);
-                }
+            IEnumerable<Todo> _todos = await _todoRepository.Get();
 
-                var todos = _todoRepository.Get();
-                return Ok(todos);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "An error occurred while get todo list");
-                return StatusCode(500, $"Internal server error: {ex.Message}");
-            }
-
+            return Ok(_todos);
         }
 
         [HttpGet]
-        [Route("GetId")]
-        public async Task<IActionResult> GetId(int id)
+        [Route("{id}")]
+        public async Task<IActionResult> GetId([FromRoute] int id)
         {
-            try
-            {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
 
-                if (!ModelState.IsValid)
-                {
+            Todo? myItem = await _todoRepository.GetId(id);
 
-                    return BadRequest(ModelState);
-                }
+            if (myItem is null)
+                return NotFound($"Item with ID {id} not found.");
 
-                var myItem = _todoRepository.GetId(id);
-
-                if (myItem == null)
-                {
-                    return NotFound($"Item with ID {id} not found.");
-                }
-
-                return Ok(myItem);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "An error occurred while get todo item");
-                return StatusCode(500, $"Internal server error: {ex.Message}");
-            }
-
+            return Ok(myItem);
         }
 
         [HttpPost]
-        [Route("Create")]
-
-        public async Task<IActionResult> Create([FromBody] string description)
+        [ProducesResponseType(typeof(Todo), StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(Todo), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(Nullable), StatusCodes.Status501NotImplemented)]
+        [ProducesResponseType(typeof(Nullable), StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> CreateTodo([FromBody] string description)
         {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
 
-            try
-            {
+            Todo todo = await _todoRepository.Create(description);
 
-                if (!ModelState.IsValid)
-                {
-                    return BadRequest(ModelState);
-                }
-
-                Todo todo = _todoRepository.Create(description);
-                return Ok(todo);
-
-
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "An error occurred for create a product");
-                return StatusCode(500, $"Internal server error: {ex.Message}");
-            }
-
-
+            return Created("/Todo", todo);
         }
-
 
         [HttpPut]
-        [Route("Put")]
-
+        [ProducesResponseType(typeof(Todo), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(Todo), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(Nullable), StatusCodes.Status501NotImplemented)]
+        [ProducesResponseType(typeof(Nullable), StatusCodes.Status422UnprocessableEntity)]
+        [ProducesResponseType(typeof(Nullable), StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Put(int id, [FromBody] string description)
         {
+            if (!ModelState.IsValid)
+                return UnprocessableEntity(ModelState);
 
-            try
-            {
+            Todo? todo = await _todoRepository.Put(id, description);
 
-                if (!ModelState.IsValid)
-                {
-                    return UnprocessableEntity(ModelState);
-                }
+            if (todo is null)
+                return NotFound($"Item with ID {id} not found.");
 
-                Todo todo = _todoRepository.Put(id, description);
-
-                if (todo == null)
-                {
-                    return NotFound($"Item with ID {id} not found.");
-                }
-
-                return Ok("Id " + id.ToString() + " updated");
-
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "An error occurred  updating a product");
-                return StatusCode(500, $"Internal server error: {ex.Message}");
-            }
-
+            return Ok($"Id {id} updated");
         }
-
 
         [HttpDelete]
-        [Route("Delete")]
-
+        [ProducesResponseType(typeof(Todo), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(Todo), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(Todo), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(Nullable), StatusCodes.Status501NotImplemented)]
+        [ProducesResponseType(typeof(Nullable), StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Delete(int id)
         {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
 
-            try
-            {
-                if (!ModelState.IsValid)
-                {
-                    return BadRequest(ModelState);
-                }
+            bool remove = await _todoRepository.Delete(id);
 
-                var remove = _todoRepository.Delete(id);
-
-                if (remove == 0)
-                {
-                    return NotFound($"Item with ID {id} not found.");
-                }
-
-                return Ok("Id " + id.ToString() + " removed");
-
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "An error occurred  deleting a product");
-                return StatusCode(500, $"Internal server error: {ex.Message}");
-            }
-
+            return !remove ? NotFound($"Item with ID {id} not found.") : Ok($"Id {id} removed");
         }
-
     }
 }

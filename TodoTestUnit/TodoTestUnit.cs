@@ -17,7 +17,7 @@ namespace TodoTestUnit
 
         //ONLY TESTS FOR GET ENDPOINT
         private readonly TodosController _controller;
-        private readonly Mock<IRepositoryTodo> _mockTodoRepository;
+        private readonly Mock<IRepository> _mockTodoRepository;
         private readonly Mock<IFeatureManager> _mockfeatureManager;
         private readonly Mock<ILogger<TodosController>> _loggerMock;
 
@@ -25,7 +25,7 @@ namespace TodoTestUnit
         public TodoTestUnit()
         {
 
-            _mockTodoRepository = new Mock<IRepositoryTodo>();
+            _mockTodoRepository = new Mock<IRepository>();
             _mockfeatureManager = new Mock<IFeatureManager>();
             _loggerMock = new Mock<ILogger<TodosController>>();
             _controller = new TodosController(_mockTodoRepository.Object, _mockfeatureManager.Object, _loggerMock.Object);

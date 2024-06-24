@@ -3,7 +3,7 @@ using Repository.Interfaces;
 
 namespace Repository
 {
-    public class TodoRepository : IRepositoryTodo
+    public class Repository<T> : IRepository<Todo>
     {
         //List only for Marvin test
         private static List<Todo> todos = new List<Todo>
@@ -13,12 +13,10 @@ namespace Repository
             new Todo { Id = 3, Description = "Play football" }
         };
 
-        public Todo Create(string description)
+        public Task<Todo> Create(string description)
         {
-
-            try
+            Task<Todo> taskCreate = Task<Todo>.Run(() =>
             {
-
                 var addTodo = new Todo()
                 {
                     Id = todos.Max(todo => todo.Id) + 1,
@@ -26,87 +24,49 @@ namespace Repository
                 };
 
                 todos.Add(addTodo);
+
                 return addTodo;
+            });
 
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
-
-
+            return taskCreate;
         }
 
-        public int Delete(int id)
+        public Task<bool> Delete(int id)
         {
-            try
+            return Task<bool>.Run(() =>
             {
-                var miElemento = todos.RemoveAll(todo => todo.Id == id);
-                return miElemento;
+                Todo? _todoToDelete = todos?.FirstOrDefault(x => x.Id == id);
 
-            }
-            catch (Exception)
-            {
+                if (_todoToDelete is null)
+                    return false;
 
-                throw;
-            }
+                return todos.Remove(_todoToDelete);
+            });
+        }
+        public Task<IEnumerable<Todo>> Get()
+        {
+            return Task.FromResult(todos ?? Enumerable.Empty<Todo>());
+        }
+        public Task<Todo?> GetId(int id)
+        {
+            Todo? _todo = todos.AsParallel().FirstOrDefault(todo => todo.Id == id);
 
-
+            return Task.FromResult(_todo);
         }
 
-        public List<Todo> Get()
+        public Task<Todo?> Put(int id, string description)
         {
-
-            try
+            return Task<Todo>.Run(() =>
             {
-                return todos;
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
-        }
-
-        public Todo GetId(int id)
-        {
-            try
-            {
-
-                var miElemento = todos.FirstOrDefault(todo => todo.Id == id);
-                return miElemento;
-
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
-
-        }
-
-        public Todo Put(int id, string description)
-        {
-
-            try
-            {
-
                 var miElemento = todos.FirstOrDefault(todo => todo.Id == id);
 
-                if (miElemento == null)
-                {
+                if (miElemento is null)
                     return null;
-                }
 
                 miElemento.Description = description;
-                return miElemento;
-            }
-            catch (Exception)
-            {
 
-                throw;
-            }
+                return miElemento;
+            });
         }
     }
 }
