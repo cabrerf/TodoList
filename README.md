@@ -28,6 +28,7 @@ Example of description: "Sleep, go to play football"
 5. For this instance system only use a list in memory, not DB.
 6. I added a ErrorHandling class with a Middleware for managing the errores
 7. For feature flags are different forms to implement, for this instance i used a featureManager
+8. In small projects also you can use Minimal API that is simply and easy, but if you want a project for scaling is better tradional api
 
 ## Feature flag 
 
