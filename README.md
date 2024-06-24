@@ -29,6 +29,10 @@ Example of description: "Sleep, go to play football"
 6. I added a ErrorHandling class with a Middleware for managing the errores
 7. For feature flags are different forms to implement, for this instance i used a featureManager
 
+## Feature flag 
+
+![alt text](image-1.png)
+
 ## Solution
 
 The solution have 4 projects: 
