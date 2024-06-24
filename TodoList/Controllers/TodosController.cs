@@ -1,10 +1,7 @@
 ﻿using Entities;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.FeatureManagement;
-using Microsoft.FeatureManagement.Mvc;
-using Repository;
 using Repository.Interfaces;
 
 namespace TodoList.Controllers

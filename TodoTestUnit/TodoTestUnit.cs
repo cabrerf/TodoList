@@ -1,12 +1,10 @@
-using Repository;
+
 using Repository.Interfaces;
 using TodoList.Controllers;
 using Moq;
 using Entities;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
 using Microsoft.FeatureManagement;
-using Castle.Core.Logging;
 using Microsoft.Extensions.Logging;
 
 namespace TodoTestUnit

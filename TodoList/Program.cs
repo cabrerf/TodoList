@@ -2,8 +2,6 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.FeatureManagement;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using Repository;
-using Repository.Interfaces;
 using System.Text;
 using TodoList.Handler;
 using TodoList.InyectionExtensions;
